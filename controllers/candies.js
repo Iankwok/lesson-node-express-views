@@ -4,19 +4,16 @@ var Candy = require('../models/Candy');
 function getAll(request, response) {
   Candy.find({}, function(error, candies){
     if (error) response.json({message: 'Could not find candy b/c:' + error});
-
-    response.json(candies)
+    response.render('layout', {candies: candies})
   })
 }
 
 // POST
 function createCandy(request, response) {
   var candy = new Candy(request.body.candy);
-
   candy.save(function(error){
     if (error) response.json({message: 'problem creating candy. ' + error});
-
-    response.json({message: "candy created successfully!"})
+    response.redirect('/candies')
   })
 }
 
@@ -27,7 +24,8 @@ function getCandy(request, response) {
   Candy.findById({_id: id}, function(error, candy) {
     if (error) response.json({message: 'Could not find candy b/c:' + error});
 
-    response.json({candy: candy});
+    // response.json({candy: candy});
+    response.render('./partials/candies/edit', {candy: candy})
   });
 }
 
